@@ -10,7 +10,12 @@ import SwiftUI
 
 struct Response: Codable{
     var status_code: Int?
+    var token: String?
     var msg: String?
+}
+
+class CommonVar: ObservableObject {
+    @Published var token: String = ""
 }
 
 struct ContentView: View {
@@ -19,6 +24,8 @@ struct ContentView: View {
     @State var password: String = ""
     
     @State var authenticationDidSucceed: Int = 0
+    
+    @EnvironmentObject var cv: CommonVar
     
     var body: some View {
         NavigationView{
@@ -82,6 +89,8 @@ struct ContentView: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             let result = try! JSONDecoder().decode(Response.self, from: data!)
             print(result.msg!)
+            cv.token = result.token!
+            print("token = \(cv.token)")
             self.authenticationDidSucceed = result.status_code!
         }.resume()
          

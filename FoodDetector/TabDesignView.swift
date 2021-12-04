@@ -10,10 +10,10 @@ import SwiftUI
 struct TabDesignView: View {
     var body: some View {
         TabView{
-            HomeView()
+            HomeView(calendar: Calendar(identifier: .gregorian))
                 .tabItem{
-                    Text("Home")
-                    Image(systemName: "eye")
+                    Text("HOME")
+                    Image(systemName: "house")
                 }
                 .navigationBarHidden(true)
             AnalyzeView()

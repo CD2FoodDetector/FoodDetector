@@ -3,11 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3E9E33B6275B8A7800544B6E /* DetectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9E33B5275B8A7800544B6E /* DetectView.swift */; };
+		21FFB055275B567E00A940F6 /* DataPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FFB054275B567E00A940F6 /* DataPoint.swift */; };
 		84110267270D486E008FE8DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84110266270D486E008FE8DC /* AppDelegate.swift */; };
 		84110269270D486E008FE8DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84110268270D486E008FE8DC /* SceneDelegate.swift */; };
 		8411026B270D486E008FE8DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8411026A270D486E008FE8DC /* ContentView.swift */; };
@@ -16,6 +16,7 @@
 		84110273270D4873008FE8DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84110271270D4873008FE8DC /* LaunchScreen.storyboard */; };
 		8411027B270D6D5D008FE8DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8411027A270D6D5D008FE8DC /* HomeView.swift */; };
 		8411027D271096EC008FE8DC /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8411027C271096EC008FE8DC /* SignupView.swift */; };
+		84258A242759A1C50007C26E /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 84258A232759A1C50007C26E /* SwiftUICharts */; };
 		8493967A27134E8E00814577 /* TabDesignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8493967927134E8E00814577 /* TabDesignView.swift */; };
 		8493967C27135F8100814577 /* AnalyzeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8493967B27135F8100814577 /* AnalyzeView.swift */; };
 		8493967E27135F9E00814577 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8493967D27135F9E00814577 /* CameraView.swift */; };
@@ -24,7 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3E9E33B5275B8A7800544B6E /* DetectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DetectView.swift; path = 5View/DetectView.swift; sourceTree = "<group>"; };
+		21FFB054275B567E00A940F6 /* DataPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
 		84110263270D486E008FE8DC /* FoodDetector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodDetector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84110266270D486E008FE8DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84110268270D486E008FE8DC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,12 +48,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84258A242759A1C50007C26E /* SwiftUICharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		21FFB052275B565500A940F6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				21FFB054275B567E00A940F6 /* DataPoint.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		8411025A270D486E008FE8DC = {
 			isa = PBXGroup;
 			children = (
@@ -72,7 +82,7 @@
 		84110265270D486E008FE8DC /* FoodDetector */ = {
 			isa = PBXGroup;
 			children = (
-				3E9E33B5275B8A7800544B6E /* DetectView.swift */,
+				21FFB052275B565500A940F6 /* Model */,
 				8493968327135FED00814577 /* 5View */,
 				84110266270D486E008FE8DC /* AppDelegate.swift */,
 				84110268270D486E008FE8DC /* SceneDelegate.swift */,
@@ -123,6 +133,9 @@
 			dependencies = (
 			);
 			name = FoodDetector;
+			packageProductDependencies = (
+				84258A232759A1C50007C26E /* SwiftUICharts */,
+			);
 			productName = FoodDetector;
 			productReference = 84110263270D486E008FE8DC /* FoodDetector.app */;
 			productType = "com.apple.product-type.application";
@@ -150,6 +163,9 @@
 				Base,
 			);
 			mainGroup = 8411025A270D486E008FE8DC;
+			packageReferences = (
+				84258A222759A1C50007C26E /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
+			);
 			productRefGroup = 84110264270D486E008FE8DC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -183,6 +199,7 @@
 				8493968227135FDB00814577 /* ProfileView.swift in Sources */,
 				8493967A27134E8E00814577 /* TabDesignView.swift in Sources */,
 				84110269270D486E008FE8DC /* SceneDelegate.swift in Sources */,
+				21FFB055275B567E00A940F6 /* DataPoint.swift in Sources */,
 				8493967C27135F8100814577 /* AnalyzeView.swift in Sources */,
 				8493968027135FC800814577 /* CommunityView.swift in Sources */,
 				8411026B270D486E008FE8DC /* ContentView.swift in Sources */,
@@ -331,6 +348,7 @@
 				DEVELOPMENT_TEAM = 3Y3Z2Z567H;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = FoodDetector/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -352,6 +370,7 @@
 				DEVELOPMENT_TEAM = 3Y3Z2Z567H;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = FoodDetector/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -385,6 +404,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		84258A222759A1C50007C26E /* XCRemoteSwiftPackageReference "SwiftUICharts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mecid/SwiftUICharts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		84258A232759A1C50007C26E /* SwiftUICharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84258A222759A1C50007C26E /* XCRemoteSwiftPackageReference "SwiftUICharts" */;
+			productName = SwiftUICharts;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8411025B270D486E008FE8DC /* Project object */;
 }

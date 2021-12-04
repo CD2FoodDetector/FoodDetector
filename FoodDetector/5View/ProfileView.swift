@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct ProfileImg: Codable{
     var img: [String]
 }
@@ -17,6 +16,14 @@ struct ProfileView: View {
     @State var selectedTab: String = "square.grid.3x3"
     @State var imgList: [String] = []
     @Namespace var animation
+    
+    @EnvironmentObject var cv: CommonVar
+    
+    let gridlayout = [
+        GridItem(.flexible(minimum: 40), spacing: 1),
+        GridItem(.flexible(minimum: 40), spacing: 1),
+        GridItem(.flexible(minimum: 40), spacing: 1)
+    ]
     
     var body: some View {
         VStack (){
@@ -32,13 +39,13 @@ struct ProfileView: View {
                         .padding(2)
                         .background(Color.white)
                         .clipShape(Circle())
-                    /*
                         .onAppear(perform: {
                             get_imgs_list("user0001")
+                            print(imgList)
                         })
-                    */
+                    
                     VStack{
-                        Text("199")
+                        Text("0")
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
@@ -49,7 +56,7 @@ struct ProfileView: View {
                     .frame(maxWidth: .infinity)
                     
                     VStack{
-                        Text("13")
+                        Text("\(imgList.count)")
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(.primary)
@@ -125,6 +132,18 @@ struct ProfileView: View {
             ScrollView(.vertical, showsIndicators: false, content: {
                 if selectedTab == "square.grid.3x3" {
                     // TODO: 지금까지 올린 식단 Grid 표시
+                    ScrollView {
+                        LazyVGrid(columns: gridlayout, spacing: 3, content: {
+                            ForEach(imgList, id: \.self) { imgName in
+                                
+                                Image(uiImage: load_img(imgName))
+                                    .resizable()
+                                    .frame(width: 128, height: 128) // iPhone12 기준 - 다른 기종 테스트 안했습니다.
+                                    .clipped()
+                                    
+                            }
+                        })
+                    }
                 }
                 else{
                     Text("Select2")
@@ -141,8 +160,8 @@ struct ProfileView: View {
             return
         }
         var request = URLRequest(url: url)
-        let params = try! JSONSerialization.data(withJSONObject: ["id":id], options: [])
-        
+        let params = try! JSONSerialization.data(withJSONObject: ["id":id, "token": cv.token], options: [])
+        print("in Profile. token = \(cv.token)")
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = params
