@@ -12,8 +12,8 @@ struct DetectView: View {
         VStack{
             //UIimage
             Text("Image")
-            
-            Spacer()
+                .ignoresSafeArea(.all, edges: .all)
+            //Spacer()
             
             
             NavigationView{
