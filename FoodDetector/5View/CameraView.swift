@@ -15,7 +15,7 @@ struct CameraView: View {
     
     @State var showImagePicker: Bool = false
     
-    @State var pickerResult: [UIImage] = []
+    @State var pickerResult: UIImage = UIImage()
     
     var body: some View {
         ZStack{
@@ -306,7 +306,7 @@ struct CameraPreview : UIViewRepresentable {
 // photo picker
 struct PhotoPicker: UIViewControllerRepresentable {
     let configuration: PHPickerConfiguration
-    @Binding var pickerResult: [UIImage]
+    @Binding var pickerResult: UIImage
     @Binding var isPresented: Bool
     
   func makeUIViewController(context: Context) -> PHPickerViewController {
@@ -336,7 +336,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
                     if let error = error {
                         print(error.localizedDescription)
                     } else {
-                        self.parent.pickerResult.append(newImage as! UIImage)
+                        self.parent.pickerResult = newImage as! UIImage
                     }
                 }
             } else {
