@@ -8,24 +8,17 @@
 import SwiftUI
 
 struct DetectView: View {
-    func load_img() -> UIImage {
-        do{
-            guard let url = URL(string: "http://verona-api.municipiumstaging.it/system/images/image/image/22/app_1920_1280_4.jpg") else{
-                return UIImage()
-            }
-            
-            let data: Data = try Data(contentsOf: url)
-            
-            return UIImage(data: data) ?? UIImage()
-        } catch{
-        }
-        return UIImage()
-    }
+    @Binding var image: UIImage
+    @Binding var showDetectView : Bool
+
     var body: some View {
         ZStack {
             VStack{
-                Image(uiImage: load_img())
+                //Image(uiImage: load_img())
+                Image(uiImage: image)
+                    .resizable()
                     .ignoresSafeArea(.all, edges: .all)
+
                 //Spacer()
                 
                 
@@ -94,6 +87,6 @@ struct DetectView: View {
 
 struct DetectView_Previews: PreviewProvider {
     static var previews: some View {
-        DetectView()
+        DetectView(image: .constant(UIImage()), showDetectView: .constant(true))
     }
 }
