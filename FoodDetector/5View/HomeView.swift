@@ -147,6 +147,9 @@ struct HomeView: View {
             DailyNutritionView(date: selectedDate)
             ImageScrollView(date: selectedDate)
         }
+        .onAppear() {
+            UITabBar.appearance().barTintColor = .white
+        }
     }
 }
 
