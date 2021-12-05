@@ -94,6 +94,7 @@ struct HomeView: View {
                             calendar.isDate(date, inSameDayAs: selectedDate) ?
                                 .bold : .medium
                         )
+                        .padding(.top, 5)
                 },
                 title: { date in
                     HStack {
@@ -101,7 +102,7 @@ struct HomeView: View {
                             .font(.system(size: 20))
                             .fontWeight(.semibold)
                     }
-                    .offset(x: 22, y: -5)
+                    .offset(x: 22, y: 0)
                     .frame(width: 100, height: 40, alignment: .center)
                 },
                 switcher: { date in
@@ -122,7 +123,7 @@ struct HomeView: View {
                         .labelStyle(IconOnlyLabelStyle())
                         .foregroundColor(Color.black)
                     }
-                    .offset(x: -120, y: -5)
+                    .offset(x: -120, y: 0)
                     Button {
                         guard let newDate = calendar.date(
                                 byAdding: .weekOfMonth,
@@ -140,11 +141,10 @@ struct HomeView: View {
                         .labelStyle(IconOnlyLabelStyle())
                         .foregroundColor(Color.black)
                     }
-                    .offset(x: 10, y: -5)
+                    .offset(x: 10, y: 0)
                 }
             ).padding(.bottom, 10)
             DailyNutritionView(date: selectedDate)
-                .padding(.bottom, 10)
             ImageScrollView(date: selectedDate)
         }
     }
@@ -279,7 +279,7 @@ public struct DailyNutritionView: View {
             ForEach(dataPoints, id: \.self) { bar in
                 HStack{
                     Text(bar.legend.label)
-                        .fontWeight(.semibold)
+//                        .fontWeight(.semibold)
                         .frame(width: 70, height: 20, alignment: .leading)
                     
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
@@ -362,16 +362,29 @@ struct ImageScrollView: View {
     @State var date: Date
     @EnvironmentObject var cv: CommonVar
     
+    @State var mealList = ["아침", "점심", "저녁"]
+    
     var body: some View {
         ScrollView(.vertical, showsIndicators: false, content:
                     {
-                        VStack {
-                            ForEach(imgList, id: \.self) { imgName in
-                                Image(uiImage: load_img(imgName))
-                                    .resizable()
-                                    .cornerRadius(10.0)
-                                    .frame(width: 360, height: 250)
-                                    .padding(.bottom, 15)
+                        VStack(spacing: 0){
+                            ForEach(Array(zip(imgList, mealList)), id: \.0) { item in
+                                ZStack{
+                                    VStack(spacing: 10){
+                                        Text(item.1)
+                                            .font(.headline)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(.leading, 15)
+                                        Image(uiImage: load_img(item.0))
+                                            .resizable()
+                                            .cornerRadius(5.0)
+                                            .frame(width: 330, height: 220)
+                                    }
+                                }
+                                .padding(10)
+                                .background(Color.black.opacity(0.06))
+                                .cornerRadius(10)
+                                .padding(10)
                             }
                         }
                     }

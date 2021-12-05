@@ -15,46 +15,49 @@ struct AnalyzeView: View {
     var colors = [Color(#colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)), Color(#colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1))]
     
     var body: some View {
-        NavigationView {
+//        NavigationView {
             ScrollView(.vertical, showsIndicators:false) {
                 VStack{
-                    
                     HStack{
-                        Text("Analyze")
-                            .font(.title)
+//                        Text("Analyze")
+                        Text("이번주 식단 리포트")
+//                            .font(.title)
+                            .font(.system(size: 25))
                             .fontWeight(.bold)
                         Spacer(minLength: 0)
-                        
-                        Button(action: {}) {
+//                        Button(action: {}) {
                             //Text("menu")
-                        } }
-                        .padding()
-                    
+//                        }
+                    }
+//                        .padding()
+                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 0))
                     
                     // Bar Chart
-                    VStack(alignment: .leading, spacing: 25){
-                        Text("Daily Calorie")
-                            .font(.system(size: 22))
-                            .fontWeight(.bold)
+                    VStack(alignment: .leading){
+                        Text("일일 섭취 칼로리")
+                            .font(.system(size: 18))
+                            .fontWeight(.semibold)
+//                        Text("Daily Calorie")
+//                            .font(.system(size: 22))
+//                            .fontWeight(.bold)
                         
                         HStack(spacing: 15){
                             ForEach(workout_Data){work in
                                 
                                 //Bars
-                                
                                 VStack{
                                     VStack{
                                         Spacer(minLength: 0)
                                         if selected == work.id{
                                             Text(getHrs(value: work.Calorie))
-                                                                                        .foregroundColor(Color(#colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)))
-                                                                                        .padding(.bottom, 5)
+                                                .foregroundColor(Color(#colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)))
+//                                                .padding(.bottom, 5)
+                                                .font(.system(size:15))
                                         }
                                         
                                         RoundedShape()
                                             .fill(LinearGradient(gradient: .init(colors: selected == work.id ? colors : [Color.black.opacity(0.06)]), startPoint: .top, endPoint: .bottom))
-                                            .frame(height: getHeight(value:
-                                                                        work.Calorie) / 22)
+                                            .frame(height: getHeight(value:work.Calorie) / 22)
                                     }
                                     .frame(height: 220)
                                     .onTapGesture{
@@ -63,8 +66,7 @@ struct AnalyzeView: View {
                                         }
                                     }
                                     Text(work.day)
-                                        .font(.caption)
-                                    
+                                        .font(.system(size: 14))
                                 }
                             }
                         }
@@ -75,32 +77,34 @@ struct AnalyzeView: View {
                     .padding()
                     
                     HStack{
-                        Text("Statistics")
-                            .font(.title)
-                            .fontWeight(.bold)
+//                        Text("Statistics")
+//                            .font(.title)
+//                            .fontWeight(.bold)
+                        Text("목표 섭취량 달성률")
+                            .font(.system(size: 20))
+                            .fontWeight(.semibold)
                         Spacer(minLength: 0)
+//
+//                        Button(action: {}) {
+//                            Text("menu")
+//                        }
+                    }
+//                        .padding()
+                    .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 0))
                         
-                        Button(action: {}) {
-                            Text("menu")
-                        } }
-                        .padding()
-                    
                     // stats Grid
-                    
-                    LazyVGrid(columns: columns, spacing: 30){
+                    LazyVGrid(columns: columns, spacing: 20){
                         ForEach(stats_Data){
                             stat in
-                            VStack(spacing: 22){
+                            VStack(spacing: 20){
                                 HStack{
                                     Text(stat.title)
-                                        .font(.system(size:22))
-                                        .fontWeight(.bold)
-                                    
+                                        .font(.system(size:18))
+                                        .fontWeight(.medium)
                                     Spacer(minLength: 0)
                                 }
                                 
                                 //Ring
-                                
                                 ZStack {
                                     Circle()
                                         .trim(from: 0, to:1)
@@ -124,7 +128,7 @@ struct AnalyzeView: View {
                             .padding()
                             .background(Color.black.opacity(0.06))
                             .cornerRadius(15)
-                            .shadow(color : Color.black.opacity(0.1), radius: 1, x:0, y:0)
+//                            .shadow(color : Color.black.opacity(0.1), radius: 1, x:0, y:0)
                         }
                     }
                     .padding()
@@ -132,22 +136,20 @@ struct AnalyzeView: View {
             }
             .background(Color.white.edgesIgnoringSafeArea(.all))
             
-        }
-        .navigationBarHidden(true)
-        .tabItem{
-            Text("ANALYZE")
-            Image(systemName: "doc.text.below.ecg")
-        }
+//        }
+//        .navigationBarHidden(true)
+//        .tabItem{
+//            Text("ANALYZE")
+//            Image(systemName: "doc.text.below.ecg")
+//        }
     }
     
     //calculating type
-    
     func getType(val: String) -> String{
         switch val {
         default: return "Kcal"
         }
     }
-    //
     
     //func getDec(valu: CGFloat) -> String{
        // let format = NumberFormatter()
@@ -155,6 +157,7 @@ struct AnalyzeView: View {
         
     //    return format.string(from: NSNumber.init(value: Float(val)))
     //}
+    
     //calculating percent
     func getPercent(current : CGFloat, Goal : CGFloat) -> String{
         let per = (current / Goal) * 100
@@ -172,7 +175,7 @@ struct AnalyzeView: View {
         let col = value
         
         return String(format:
-            "%.1f", col)
+            "%.f", col)
     }
 }
 
@@ -183,23 +186,21 @@ struct RoundedShape : Shape {
         return Path(path.cgPath)
     }
 }
-// sample Data
 
 struct Daily : Identifiable {
-    
     var id : Int
     var day : String
     var Calorie : CGFloat
 }
 
 var workout_Data = [
-    Daily(id: 0, day: "Sun", Calorie: 460),
-    Daily(id: 1, day: "Mon", Calorie: 880),
-    Daily(id: 2, day: "Tus", Calorie: 250),
-    Daily(id: 3, day: "Wed", Calorie: 360),
-    Daily(id: 4, day: "Thu", Calorie: 1220),
-    Daily(id: 5, day: "Fri", Calorie: 750),
-    Daily(id: 6, day: "Sat", Calorie: 950),
+    Daily(id: 0, day: "일", Calorie: 460),
+    Daily(id: 1, day: "월", Calorie: 880),
+    Daily(id: 2, day: "화", Calorie: 250),
+    Daily(id: 3, day: "수", Calorie: 360),
+    Daily(id: 4, day: "목", Calorie: 1220),
+    Daily(id: 5, day: "금", Calorie: 750),
+    Daily(id: 6, day: "토", Calorie: 950),
 ]
 struct AnalyzeView_Previews: PreviewProvider {
     static var previews: some View {
@@ -208,7 +209,6 @@ struct AnalyzeView_Previews: PreviewProvider {
 }
 
 // Stats Data
-
 struct Stats : Identifiable {
     var id : Int
     var title : String
