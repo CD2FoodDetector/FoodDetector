@@ -9,115 +9,135 @@ import SwiftUI
 import AVFoundation
 import PhotosUI
 
+
 struct CameraView: View {
     
     @StateObject var camera = CameraModel()
     
     @State var showImagePicker: Bool = false
     
-    @State var pickerResult: [UIImage] = []
+    @State var pickerResult: UIImage = UIImage()
     
     var body: some View {
-        ZStack{
-            //goint to be camera preview..
-            CameraPreview(camera: camera)
-            //Color.black
-                .ignoresSafeArea(.all, edges: .all)
-            
-            VStack{
+
+            ZStack{
+                //goint to be camera preview..
+                CameraPreview(camera: camera)
+                //Color.black
+                    .ignoresSafeArea(.all, edges: .all)
                 
-                if camera.isTaken{
+                VStack{
                     
-                    HStack {
+                   // if camera.isTaken{
+                        
+                        HStack {
+                            Spacer()
+                            if (camera.isTaken) && (pickerResult==UIImage()){
+                                Button(action: camera.reTake, label: {
+                                    Image(systemName:"arrow.triangle.2.circlepath.camera")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color.white)
+                                        .clipShape(Circle())
+                                    
+                                })
+                                .padding(.leading,10)
+                            }
+                            else{
+                                //NavigationView{
+                                    NavigationLink(destination: DetectView(image: $pickerResult)){
+                                        
+                                            Text("음식 detect")
+                                                .foregroundColor(.black)
+                                                .fontWeight(.semibold)
+                                                .padding(.vertical,10)
+                                                .padding(.horizontal,20)
+                                                .background(Color.white)
+                                                .clipShape(Capsule())
+                                        
+                                    }
+                                    .padding(.leading,10)
+                                    .navigationBarTitle("", displayMode: .inline)
+                                
+                            }
+                        }
+                        
                         Spacer()
                         
-                        Button(action: camera.reTake, label: {
-                            Image(systemName:"arrow.triangle.2.circlepath.camera")
-                                .foregroundColor(.black)
-                                .padding()
-                                .background(Color.white)
-                                .clipShape(Circle())
-                            
-                        })
-                        .padding(.leading,10)
-                    }
+                    //}
+                    
                     
                     Spacer()
                     
-                }
-                
-                
-                Spacer()
-                
-                HStack{
-                    
-                    // if taken showing save and again take button..
-                    
-                    if camera.isTaken{
+                    HStack{
                         
-                        Button(action: {if !camera.isSaved{camera.savePic()}}, label: {
-                            Text(camera.isSaved ? "Saved":"Save")
-                                .foregroundColor(.black)
-                                .fontWeight(.semibold)
-                                .padding(.vertical,10)
-                                .padding(.horizontal,20)
-                                .background(Color.white)
-                                .clipShape(Capsule())
-                        })
-                        .padding(.leading,10)
+                        // if taken showing save and again take button..
                         
-                        Spacer()
-                        
-                    }
-                    else{
-                        HStack{
+                        if camera.isTaken{
                             
-                            Spacer()
-                            Spacer()
-                            
-                            Button(action: camera.takePic, label: {
-                                
-                                ZStack{
-                                    
-                                    Circle()
-                                        .fill(Color.white)
-                                        .frame(width: 60, height: 60)
-                                    
-                                    Circle()
-                                        .stroke(Color.white, lineWidth: 2)
-                                        .frame(width: 70, height: 70)
-                                }
-                            })
-                            
-                            Spacer()
-                            //picker
-                            Button(action: {self.showImagePicker = true}, label: {
-                                Image(systemName:"photo.on.rectangle.angled")
+                            Button(action: {if !camera.isSaved{pickerResult = camera.savePic()}}, label: {
+                                Text(camera.isSaved ? "Saved":"Save")
                                     .foregroundColor(.black)
-                                    .padding()
+                                    .fontWeight(.semibold)
+                                    .padding(.vertical,10)
+                                    .padding(.horizontal,20)
                                     .background(Color.white)
-                                    .clipShape(Circle())
-                                
+                                    .clipShape(Capsule())
                             })
+                            .padding(.leading,10)
                             
-                            //.padding(.leading,10)
+                            Spacer()
                             
                         }
-                    }
+                        else{
+                            HStack{
+                                
+                                Spacer()
+                                Spacer()
+                                
+                                Button(action: camera.takePic, label: {
+                                    
+                                    ZStack{
+                                        
+                                        Circle()
+                                            .fill(Color.white)
+                                            .frame(width: 60, height: 60)
+                                        
+                                        Circle()
+                                            .stroke(Color.white, lineWidth: 2)
+                                            .frame(width: 70, height: 70)
+                                    }
+                                })
+                                
+                                Spacer()
+                                //picker
 
+                                Button(action: {self.showImagePicker = true}, label: {
+                                    Image(systemName:"photo.on.rectangle.angled")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color.white)
+                                        .clipShape(Circle())
+                                    
+                                })
+                                
+                                //.padding(.leading,10)
+                                
+                            }
+                        }
+
+                    }
+                    .frame(height:75)
                 }
-                .frame(height:75)
             }
-        }
-        .onAppear(perform: {
-            camera.Check()
-        })
-        .sheet(isPresented: $showImagePicker, content: {
-              let configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
-              PhotoPicker(configuration: configuration, pickerResult: $pickerResult, isPresented: $showImagePicker)
+            .onAppear(perform: {
+                camera.Check()
             })
-    
-    }
+            .sheet(isPresented: $showImagePicker, content: {
+                  let configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+                  PhotoPicker(configuration: configuration, pickerResult: $pickerResult, isPresented: $showImagePicker)
+                })
+        }
 }
 
 struct CameraView_Previews: PreviewProvider {
@@ -262,7 +282,7 @@ class CameraModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
         self.picData = imageData
     }
     
-    func savePic(){
+    func savePic()-> UIImage {
         let image = UIImage(data: self.picData)!
         
         //saving image...
@@ -271,6 +291,8 @@ class CameraModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
         self.isSaved = true
         
         print("saved Successfully")
+        
+        return image
     }
 }
 
@@ -306,7 +328,7 @@ struct CameraPreview : UIViewRepresentable {
 // photo picker
 struct PhotoPicker: UIViewControllerRepresentable {
     let configuration: PHPickerConfiguration
-    @Binding var pickerResult: [UIImage]
+    @Binding var pickerResult: UIImage
     @Binding var isPresented: Bool
     
   func makeUIViewController(context: Context) -> PHPickerViewController {
@@ -336,7 +358,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
                     if let error = error {
                         print(error.localizedDescription)
                     } else {
-                        self.parent.pickerResult.append(newImage as! UIImage)
+                        self.parent.pickerResult = newImage as! UIImage
                     }
                 }
             } else {
