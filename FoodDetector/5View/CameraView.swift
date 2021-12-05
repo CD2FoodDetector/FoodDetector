@@ -18,17 +18,12 @@ struct CameraView: View {
     
     @State var pickerResult: UIImage = UIImage()
     
-    @State var showDetectView = false
-    
     var body: some View {
-        if showDetectView{
-            DetectView(image: $pickerResult, showDetectView: $showDetectView)
-        }
-        else{
+
             ZStack{
                 //goint to be camera preview..
-                //CameraPreview(camera: camera)
-                Color.black
+                CameraPreview(camera: camera)
+                //Color.black
                     .ignoresSafeArea(.all, edges: .all)
                 
                 VStack{
@@ -38,7 +33,7 @@ struct CameraView: View {
                         HStack {
                             Spacer()
                             if (camera.isTaken) && (pickerResult==UIImage()){
-                                Button(action: {showDetectView=true}, label: {
+                                Button(action: camera.reTake, label: {
                                     Image(systemName:"arrow.triangle.2.circlepath.camera")
                                         .foregroundColor(.black)
                                         .padding()
@@ -49,16 +44,21 @@ struct CameraView: View {
                                 .padding(.leading,10)
                             }
                             else{
-                                Button(action: {showDetectView = true}, label: {
-                                    Text("음식 detect")
-                                        .foregroundColor(.black)
-                                        .fontWeight(.semibold)
-                                        .padding(.vertical,10)
-                                        .padding(.horizontal,20)
-                                        .background(Color.white)
-                                        .clipShape(Capsule())
-                                })
-                                .padding(.leading,10)
+                                //NavigationView{
+                                    NavigationLink(destination: DetectView(image: $pickerResult)){
+                                        
+                                            Text("음식 detect")
+                                                .foregroundColor(.black)
+                                                .fontWeight(.semibold)
+                                                .padding(.vertical,10)
+                                                .padding(.horizontal,20)
+                                                .background(Color.white)
+                                                .clipShape(Capsule())
+                                        
+                                    }
+                                    .padding(.leading,10)
+                                //}
+                                
                             }
                         }
                         
@@ -111,6 +111,7 @@ struct CameraView: View {
                                 
                                 Spacer()
                                 //picker
+
                                 Button(action: {self.showImagePicker = true}, label: {
                                     Image(systemName:"photo.on.rectangle.angled")
                                         .foregroundColor(.black)
@@ -137,8 +138,6 @@ struct CameraView: View {
                   PhotoPicker(configuration: configuration, pickerResult: $pickerResult, isPresented: $showImagePicker)
                 })
         }
-    
-    }
 }
 
 struct CameraView_Previews: PreviewProvider {
