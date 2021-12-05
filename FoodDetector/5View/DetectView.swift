@@ -56,7 +56,7 @@ struct DetectView: View {
         return str.components(separatedBy: separators)
     }
     
-    func get_nutrition(foodid: String, id: String, serve_size: Float, size_unit:String){
+    func get_nutrition(foodid: String, id: String, serve_size: Float, size_unit:String) {
         
         guard let url = URL(string: "http://3.36.103.81:80/account/food_nutrition") else {
             print("Invalid url")
@@ -70,6 +70,8 @@ struct DetectView: View {
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             let res = try! JSONDecoder().decode(foodNutritionResult.self, from: data!)
+            print(error)
+            
             //get info
         }.resume()
         
@@ -89,14 +91,34 @@ struct DetectView: View {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = params
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            let res = try! JSONDecoder().decode(DetectResult.self, from: data!)
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data=data else{
+                print("err at data")
+                return
+            }
+            do{
+                let res = try JSONDecoder().decode(DetectResult.self, from: data)
+                for food in res.result {
+                    //let foodInfo = values(food)
+                    foodnameList.append(food.food_name)
+                    foodnameList.append(food.food_id)
+                    print(food)
+                }
+            } catch{
+                
+                print("에러")
+                print(error)
+                print(response ?? "response sample")
+                return
+            }
             print("decode!")
+            /*
             for i in res.result{
                 foodnameList.append(i[6])
                 foodnameList.append(i[5])
 
             }
+             */
             /*
             for food in res.result {
                 //let foodInfo = values(food)
@@ -119,7 +141,13 @@ struct DetectView: View {
                     .frame(maxHeight: 200)
                     //.aspectRatio(contentMode: .fit)
                     .ignoresSafeArea(.container, edges: .all)
-                    
+                    .onAppear(perform: {
+                        //connect server..
+                        get_detect("user0001_0000007.jpg")
+                        print(foodnameList)
+                        print(foodidList)
+                    })
+
                 //Spacer()
                 
                 NavigationView{
@@ -183,11 +211,6 @@ struct DetectView: View {
             }
         }
         
-        .onAppear(perform: {
-            get_detect("user0001_0000007.jpg")
-            print(foodnameList)
-            print(foodidList)
-        })
     }
 }
 
