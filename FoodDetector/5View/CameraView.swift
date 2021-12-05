@@ -57,7 +57,7 @@ struct CameraView: View {
                                         
                                     }
                                     .padding(.leading,10)
-                                //}
+                                    .navigationBarTitle("", displayMode: .inline)
                                 
                             }
                         }

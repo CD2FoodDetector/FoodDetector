@@ -141,16 +141,18 @@ struct DetectView: View {
     
     var body: some View {
         ZStack {
+            ScrollView(.vertical, showsIndicators: false){
             VStack{
-                //Image(uiImage: load_img())
+                
                 Image(uiImage: image)
                 //Image(systemName: "photo")
-                //.aspectRatio(contentMode: .fit)
+                //
                     .resizable()
+                    .ignoresSafeArea(.all, edges: .top)
                     .cornerRadius(10.0)
-                    .frame(width: 300, height: 250)
-                    .padding(.bottom, 15)
-                    //.ignoresSafeArea(.container, edges: .all)
+                    .frame(height: 250)
+                    .aspectRatio(contentMode: .fill)
+                   // .padding(.bottom, 15)
                     .onAppear(perform: {
                         //connect server..
                      //   get_detect("user0001_0000007.jpg")
@@ -161,7 +163,7 @@ struct DetectView: View {
                 FoodInfoView()
               
             }
-            
+            }
             VStack{
                 Spacer()
                 HStack(){
@@ -183,8 +185,10 @@ struct DetectView: View {
                 
             }
         }
-        
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(false)
     }
+    
 }
 
 struct NutritionView:View{

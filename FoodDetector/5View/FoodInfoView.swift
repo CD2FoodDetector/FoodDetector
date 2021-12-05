@@ -11,7 +11,9 @@ import SwiftUI
 
 
 struct FoodInfoView: View {
-    @State var FoodList: [foodNutritionResult] = [FoodDetector.foodNutritionResult(status_code: Optional(1), id: "12011008", name: "배추김치", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 10.66), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 1.27), FoodDetector.FoodNutritionInfo(key: "protein", value: 0.68), FoodDetector.FoodNutritionInfo(key: "fat", value: 0.31), FoodDetector.FoodNutritionInfo(key: "sugar", value: 0.95), FoodDetector.FoodNutritionInfo(key: "salt", value: 123.03), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.02)]), FoodDetector.foodNutritionResult(status_code: Optional(1), id: "11013007", name: "시금치나물", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 34.28), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 1.68), FoodDetector.FoodNutritionInfo(key: "protein", value: 1.87), FoodDetector.FoodNutritionInfo(key: "fat", value: 2.23), FoodDetector.FoodNutritionInfo(key: "sugar", value: 0.05), FoodDetector.FoodNutritionInfo(key: "salt", value: 68.12), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.2)])]
+    @State var FoodList: [foodNutritionResult] = [FoodDetector.foodNutritionResult(status_code: Optional(1), id: "12011008", name: "배추김치", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 10.66), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 1.27), FoodDetector.FoodNutritionInfo(key: "protein", value: 0.68), FoodDetector.FoodNutritionInfo(key: "fat", value: 0.31), FoodDetector.FoodNutritionInfo(key: "sugar", value: 0.95), FoodDetector.FoodNutritionInfo(key: "salt", value: 123.03), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.02)]), FoodDetector.foodNutritionResult(status_code: Optional(1), id: "11013007", name: "시금치나물", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 34.28), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 1.68), FoodDetector.FoodNutritionInfo(key: "protein", value: 1.87), FoodDetector.FoodNutritionInfo(key: "fat", value: 2.23), FoodDetector.FoodNutritionInfo(key: "sugar", value: 0.05), FoodDetector.FoodNutritionInfo(key: "salt", value: 68.12), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.2)]),FoodDetector.foodNutritionResult(status_code: Optional(1), id: "1011011", name: "쌀밥", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 315.0), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 70.0), FoodDetector.FoodNutritionInfo(key: "protein", value: 5.0), FoodDetector.FoodNutritionInfo(key: "fat", value: 1.5), FoodDetector.FoodNutritionInfo(key: "sugar", value: 0.0), FoodDetector.FoodNutritionInfo(key: "salt", value: 15.0), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.0)]),FoodDetector.foodNutritionResult(status_code: Optional(1), id: "4012001", name: "근대된장국", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 38.84), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 2.71), FoodDetector.FoodNutritionInfo(key: "protein", value: 3.49), FoodDetector.FoodNutritionInfo(key: "fat", value: 1.56), FoodDetector.FoodNutritionInfo(key: "sugar", value: 3.31), FoodDetector.FoodNutritionInfo(key: "salt", value: 1304.10), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.21)])
+                                                  
+    ]
     
     @State var size = [String](repeating: "1", count: 10)
     
@@ -35,12 +37,12 @@ struct FoodInfoView: View {
         var str = ""
         
         if size == ""{
-            str = "0.00 g"
-            total[idx].value+=0.0
+            str = "0.00"
+           // self.total[idx].value+=0.0
         }
         else{
-            str = "\(String(format:"%.2f",value * Double(size)!)) g"
-            total[idx].value+=value * Double(size)!
+            str = "\(String(format:"%.2f",value * Double(size)!))"
+           // self.total[idx].value+=value * Double(size)!
 
         }
         return str
@@ -98,6 +100,15 @@ struct FoodInfoView: View {
                                    // .textFieldStyle(.RoundedBorder)
 
                                 //}
+                                .onAppear{
+                                    if size[i] == ""{
+                                        self.total[0].value+=0.0
+                                    }
+                                    else{
+                                        self.total[0].value+=FoodList[i].nutrition[0].value * Double(size[i])!
+
+                                    }
+                                }
                                 
                            }
                         .padding(.bottom,5)
@@ -132,7 +143,15 @@ struct FoodInfoView: View {
                             )
                             .foregroundColor(.black)
                             .cornerRadius(15.0)
-                        
+                            .onAppear{
+                                if size[i] == ""{
+                                    self.total[idx].value+=0.0
+                                }
+                                else{
+                                    self.total[idx].value+=FoodList[i].nutrition[idx].value * Double(size[i])!
+
+                                }
+                            }
                         }
                         }
                             
@@ -153,7 +172,7 @@ struct FoodInfoView: View {
                 
             
             } //Vstack end
-        .padding()
+        .padding(.top, 5)
        
     }
     }
