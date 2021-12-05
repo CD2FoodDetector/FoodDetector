@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileImg: Codable{
     var img: [String]
+    var datetime: [Int]
 }
 
  

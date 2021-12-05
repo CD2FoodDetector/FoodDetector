@@ -351,7 +351,7 @@ public struct DailyNutritionView: View {
             dataPoints[0] = DataPoint(value: total[0]/2000, legend: calorie)
             dataPoints[1] = DataPoint(value: total[1]/140, legend: carbon)
             dataPoints[2] = DataPoint(value: total[2]/50, legend: protein)
-            dataPoints[3] = DataPoint(value: total[3]/50, legend: fat)
+            dataPoints[3] = DataPoint(value: total[3]/60, legend: fat)
             isModified = true
         }.resume()
     }
@@ -359,10 +359,12 @@ public struct DailyNutritionView: View {
 
 struct ImageScrollView: View {
     @State var imgList: [String] = []
+    @State var imgDatetime: [Int] = []
     @State var date: Date
     @EnvironmentObject var cv: CommonVar
     
-    @State var mealList = ["아침", "점심", "저녁"]
+    let mealListConst = ["아침", "점심", "저녁"]
+    @State var mealList = [1]
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false, content:
@@ -371,7 +373,7 @@ struct ImageScrollView: View {
                             ForEach(Array(zip(imgList, mealList)), id: \.0) { item in
                                 ZStack{
                                     VStack(spacing: 10){
-                                        Text(item.1)
+                                        Text(mealListConst[item.1])
                                             .font(.headline)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .padding(.leading, 15)
@@ -418,6 +420,7 @@ struct ImageScrollView: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             let result = try! JSONDecoder().decode(ProfileImg.self, from: data!)
             imgList = result.img
+            mealList = result.datetime
         }.resume()
     }
     
