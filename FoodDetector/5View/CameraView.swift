@@ -43,8 +43,26 @@ struct CameraView: View {
                                 })
                                 .padding(.leading,10)
                             }
+                            if pickerResult != UIImage() {
+                                NavigationLink(destination: DetectView(image: $pickerResult)){
+                                    
+                                        Text("음식 detect")
+                                            .foregroundColor(.black)
+                                            .fontWeight(.semibold)
+                                            .padding(.vertical,10)
+                                            .padding(.horizontal,20)
+                                            .background(Color.white)
+                                            .clipShape(Capsule())
+                                    
+                                }
+                                .padding(.leading,10)
+                                //.navigationBarTitle("", displayMode: .inline)
+                            
+                            }
+                            else{
+                                Text("not yet")
+                            }
 
-                        Spacer()
                         
                     }
                     
@@ -121,25 +139,6 @@ struct CameraView: View {
                     })
                 
                 
-                if pickerResult != UIImage(){
-                    NavigationLink(destination: DetectView(image: $pickerResult)){
-                        
-                            Text("음식 detect")
-                                .foregroundColor(.black)
-                                .fontWeight(.semibold)
-                                .padding(.vertical,10)
-                                .padding(.horizontal,20)
-                                .background(Color.white)
-                                .clipShape(Capsule())
-                        
-                    }
-                    .padding(.leading,10)
-                    .navigationBarTitle("", displayMode: .inline)
-                
-                }
-                else{
-                    
-                }
 
            
         }
