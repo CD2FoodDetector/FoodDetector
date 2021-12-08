@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct Post {
     let id: Int
@@ -17,6 +18,36 @@ struct CommunityImg: Codable{
     var user_id: [String]
     var datetime: [String]
     var status_code: Int
+}
+
+class Filter: ObservableObject {
+    @Published
+    var showSettings = false
+    
+    enum AmountOfCarbo: String, CaseIterable {
+        case 많이, 보통, 적게
+    }
+    
+    @Published
+    var amountOfCarbo = AmountOfCarbo.많이
+    
+    enum AmountOfProtein: String, CaseIterable {
+        case 많이, 보통, 적게
+    }
+    
+    @Published
+    var amountOfProtein = AmountOfProtein.많이
+    
+    enum AmountOfFat: String, CaseIterable {
+        case 많이, 보통, 적게
+    }
+    
+    @Published
+    var amountOfFat = AmountOfFat.많이
+    
+    
+    @Published
+    var isDiabetes = false
 }
 
 struct PostView: View {
@@ -71,6 +102,9 @@ struct CommunityView: View {
     
     @State var posts: [Post] = []
     
+    @ObservedObject var filter = Filter()
+    
+    
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
@@ -81,20 +115,64 @@ struct CommunityView: View {
                     }
                     .navigationBarTitle(Text("커뮤니티"))
                     .navigationBarItems(trailing: Button(action: {
-                        print("click camera...")
-                    }, label: {
-                        Image(systemName: "line.3.horizontal.decrease.circle")
-                            .renderingMode(.original)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(.black)
-                    }))
+                                    self.filter.showSettings = true
+                                }, label: {
+                                    Image(systemName: "line.3.horizontal.decrease.circle")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24)
+                                        .foregroundColor(.black)
+                                }))
+                                    .sheet(isPresented: $filter.showSettings, content: {
+                                        FilterView(filter: self.filter)
+                                })
                 
             }
+            
             .onAppear(perform: {
                 get_imgs_list("1231")
             })
+            .onReceive(filter.$amountOfProtein, perform: { _ in
+                var gcode: String = ""
+                
+                switch filter.amountOfCarbo.rawValue {
+                case "많이":
+                    gcode += "3"
+                case "보통":
+                    gcode += "2"
+                case "적게":
+                    gcode += "1"
+                default:
+                    gcode += "0"
+                }
+                
+                switch filter.amountOfProtein.rawValue {
+                case "많이":
+                    gcode += "3"
+                case "보통":
+                    gcode += "2"
+                case "적게":
+                    gcode += "1"
+                default:
+                    gcode += "0"
+                }
+                
+                switch filter.amountOfFat.rawValue {
+                case "많이":
+                    gcode += "3"
+                case "보통":
+                    gcode += "2"
+                case "적게":
+                    gcode += "1"
+                default:
+                    gcode += "0"
+                }
+                gcode += "2"
+                print("onReceive. gcode = \(gcode)")
+                get_imgs_list(gcode)
+            })
+            
         }
         
         
@@ -131,5 +209,85 @@ struct CommunityView: View {
 struct CommunityView_Previews: PreviewProvider {
     static var previews: some View {
         CommunityView()
+    }
+}
+
+
+struct FilterView: View {
+    @Environment(\.presentationMode)
+    var presentationMode
+    
+    @ObservedObject var filter: Filter
+    
+    @State var amountOfCarbo = Filter.AmountOfCarbo.많이
+    @State var amountOfProtein = Filter.AmountOfProtein.많이
+    @State var amountOfFat = Filter.AmountOfFat.많이
+    
+    @State
+    var isDiabetes = false
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section(header: Text("탄수화물")) {
+                    Picker(selection: $amountOfCarbo, label: Text("Shape"), content: {
+                        ForEach(Filter.AmountOfCarbo.allCases, id: \.self) { shape in
+                            Text("\(shape.rawValue)")
+                            .tag(shape)
+                        }
+                    })
+                    .pickerStyle(SegmentedPickerStyle())
+                    
+                }
+                
+                Section(header: Text("단백질")) {
+                    Picker(selection: $amountOfProtein, label: Text("Shape"), content: {
+                        ForEach(Filter.AmountOfProtein.allCases, id: \.self) { shape in
+                            Text("\(shape.rawValue)")
+                            .tag(shape)
+                        }
+                    })
+                    .pickerStyle(SegmentedPickerStyle())
+                    
+                }
+                
+                Section(header: Text("지방")) {
+                    Picker(selection: $amountOfFat, label: Text("Shape"), content: {
+                        ForEach(Filter.AmountOfFat.allCases, id: \.self) { shape in
+                            Text("\(shape.rawValue)")
+                            .tag(shape)
+                        }
+                    })
+                    .pickerStyle(SegmentedPickerStyle())
+                    
+                }
+                
+                Section(header: Text("Other Settings")) {
+                    Toggle(isOn: $isDiabetes, label: {
+                        Text("당뇨 환자 식단")
+                            .fontWeight(.light)
+                            .foregroundColor(.gray)
+                            .font(.body)
+                    })
+                }
+            }
+            .navigationBarTitle("Filter")
+            .navigationBarItems(trailing: Button(action: {
+                self.filter.amountOfCarbo = self.amountOfCarbo
+                self.filter.amountOfProtein = self.amountOfProtein
+                self.filter.amountOfFat = self.amountOfFat
+                self.filter.isDiabetes = self.isDiabetes
+                
+                self.presentationMode.wrappedValue.dismiss()
+            }, label: {
+                Text("완료")
+            }))
+        }
+        .onAppear(perform: {
+            self.amountOfCarbo = self.filter.amountOfCarbo
+            self.amountOfProtein = self.filter.amountOfProtein
+            self.amountOfFat = self.filter.amountOfFat
+            self.isDiabetes = self.filter.isDiabetes
+        })
     }
 }
