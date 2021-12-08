@@ -295,6 +295,7 @@ public struct DailyNutritionView: View {
                             alignment: .leading
                     )
                 }
+                
             }
         }
         /*
@@ -383,7 +384,8 @@ struct ImageScrollView: View {
                                         Image(uiImage: load_img(item.0))
                                             .resizable()
                                             .cornerRadius(5.0)
-                                            .frame(width: 330, height: 220)
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(maxHeight: 400)
                                     }
                                 }
                                 .padding(10)
