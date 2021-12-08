@@ -11,8 +11,11 @@ import SwiftUI
 
 
 struct FoodInfoView: View {
-    @State var FoodList: [foodNutritionResult] = [FoodDetector.foodNutritionResult(status_code: Optional(1), id: "12011008", name: "배추김치", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 10.66), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 1.27), FoodDetector.FoodNutritionInfo(key: "protein", value: 0.68), FoodDetector.FoodNutritionInfo(key: "fat", value: 0.31), FoodDetector.FoodNutritionInfo(key: "sugar", value: 0.95), FoodDetector.FoodNutritionInfo(key: "salt", value: 123.03), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.02)]), FoodDetector.foodNutritionResult(status_code: Optional(1), id: "11013007", name: "시금치나물", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 34.28), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 1.68), FoodDetector.FoodNutritionInfo(key: "protein", value: 1.87), FoodDetector.FoodNutritionInfo(key: "fat", value: 2.23), FoodDetector.FoodNutritionInfo(key: "sugar", value: 0.05), FoodDetector.FoodNutritionInfo(key: "salt", value: 68.12), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.2)]),FoodDetector.foodNutritionResult(status_code: Optional(1), id: "1011011", name: "쌀밥", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 315.0), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 70.0), FoodDetector.FoodNutritionInfo(key: "protein", value: 5.0), FoodDetector.FoodNutritionInfo(key: "fat", value: 1.5), FoodDetector.FoodNutritionInfo(key: "sugar", value: 0.0), FoodDetector.FoodNutritionInfo(key: "salt", value: 15.0), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.0)]),FoodDetector.foodNutritionResult(status_code: Optional(1), id: "4012001", name: "근대된장국", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 38.84), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 2.71), FoodDetector.FoodNutritionInfo(key: "protein", value: 3.49), FoodDetector.FoodNutritionInfo(key: "fat", value: 1.56), FoodDetector.FoodNutritionInfo(key: "sugar", value: 3.31), FoodDetector.FoodNutritionInfo(key: "salt", value: 1304.10), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.21)])
-                                                  
+    @State var FoodList: [foodNutritionResult] =
+        [FoodDetector.foodNutritionResult(status_code: 1, id: "12011008", name: "배추김치", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 10.66), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 1.27), FoodDetector.FoodNutritionInfo(key: "protein", value: 0.68), FoodDetector.FoodNutritionInfo(key: "fat", value: 0.31), FoodDetector.FoodNutritionInfo(key: "sugar", value: 0.95), FoodDetector.FoodNutritionInfo(key: "salt", value: 123.03), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.02)]),
+         FoodDetector.foodNutritionResult(status_code: 1, id: "11013007", name: "시금치나물", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 34.28), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 1.68), FoodDetector.FoodNutritionInfo(key: "protein", value: 1.87), FoodDetector.FoodNutritionInfo(key: "fat", value: 2.23), FoodDetector.FoodNutritionInfo(key: "sugar", value: 0.05), FoodDetector.FoodNutritionInfo(key: "salt", value: 68.12), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.2)]),
+         FoodDetector.foodNutritionResult(status_code: 1, id: "1011011", name: "쌀밥", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 315.0), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 70.0), FoodDetector.FoodNutritionInfo(key: "protein", value: 5.0), FoodDetector.FoodNutritionInfo(key: "fat", value: 1.5), FoodDetector.FoodNutritionInfo(key: "sugar", value: 0.0), FoodDetector.FoodNutritionInfo(key: "salt", value: 15.0), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.0)]),
+         FoodDetector.foodNutritionResult(status_code: 1, id: "4012001", name: "근대된장국", nutrition: [FoodDetector.FoodNutritionInfo(key: "calorie", value: 38.84), FoodDetector.FoodNutritionInfo(key: "carbohydrate", value: 2.71), FoodDetector.FoodNutritionInfo(key: "protein", value: 3.49), FoodDetector.FoodNutritionInfo(key: "fat", value: 1.56), FoodDetector.FoodNutritionInfo(key: "sugar", value: 3.31), FoodDetector.FoodNutritionInfo(key: "salt", value: 1304.10), FoodDetector.FoodNutritionInfo(key: "saturated_fat", value: 0.21)])
     ]
     
     @State var size = [String](repeating: "1", count: 10)
@@ -50,131 +53,126 @@ struct FoodInfoView: View {
     
     
     var body: some View {
+        
         VStack (spacing: 0){
             //영양분 뷰
             ScrollView(.horizontal, showsIndicators: false){
                 HStack{
                     ForEach(0..<self.total.count){ idx in
-                VStack{
-                    Text("\(getKorean(str: self.total[idx].key))").bold()
-                    Text("\(String(format:"%.2f",self.total[idx].value)) g")
-                }
-                
-                .padding()
-                .frame(height: 60)
-                .background(
-                    LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.9803921569, green: 0.6470588235, blue: 0.3764705882, alpha: 1)), Color(#colorLiteral(red: 0.9882352941, green: 0.6705882353, blue: 0.6039215686, alpha: 1))]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                )
-                .foregroundColor(.white)
-                .cornerRadius(15.0)
-            
-            }
-            }
-                
-            }
-            
-            
-            
-        ScrollView(.vertical, showsIndicators: false){
-            VStack(alignment: .center){
-                ForEach(0..<FoodList.count){ i in
-                    VStack(){
-                        //음식
-                        VStack(alignment: .leading){
-                           // HStack{
-                            Text("\(self.FoodList[i].name)").font(.title).fontWeight(.bold)
-                                .padding(.top,5)
-                            //}
-                            
-                            Spacer()
-                        HStack(alignment: .center) {
-                            TextField("1",text: $size[i])
-                                        .frame(width: 30)
-                                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                                        
-                                   // .textFieldStyle(.RoundedBorder)
-                                    Text("인분")
-                            Spacer()
-                            Spacer()
-                            Text("\(getEat(idx: 0, value: FoodList[i].nutrition[0].value, size: size[i])) kcal")
-                                   // .textFieldStyle(.RoundedBorder)
-
-                                //}
-                                .onAppear{
-                                    if size[i] == ""{
-                                        self.total[0].value+=0.0
-                                    }
-                                    else{
-                                        self.total[0].value+=FoodList[i].nutrition[0].value * Double(size[i])!
-
-                                    }
-                                }
-                                
-                           }
-                        .padding(.bottom,5)
-
+                        VStack{
+                            Text("\(getKorean(str: self.total[idx].key))").bold()
+                            Text("\(String(format:"%.2f",self.total[idx].value)) g")
                         }
                         .padding()
-                        .frame(height: 80)
-                        .background(
-                            LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)), Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                        )
-                        .foregroundColor(.black)
+                        .frame(height: 60)
+                        .backgroundColor(.blue)
+                        .foregroundColor(.white)
                         .cornerRadius(15.0)
-                        Spacer()
-                        //영양분 뷰
-                        ScrollView(.horizontal, showsIndicators: false){
-                            HStack{
-                                ForEach(1..<self.FoodList[i].nutrition.count){ idx in
-                            HStack{
-                                Text("\(getKorean(str: self.FoodList[i].nutrition[idx].key)) : ")
-                                if size[i] == ""{
-                                    Text("0.00 g")
-                                }
-                                else{
-                                    Text("\(getEat(idx: idx, value: FoodList[i].nutrition[idx].value, size: size[i])) g")
-                                }
+               
+                    }
+                }
+            }
+            
+            ScrollView(.vertical, showsIndicators: false){
+                VStack(alignment: .center){
+                    ForEach(0..<FoodList.count){ i in
+                        VStack(){
+                            //음식
+                            VStack(alignment: .leading){
+                               // HStack{
+                                Text("\(self.FoodList[i].name)").font(.title).fontWeight(.bold)
+                                    .padding(.top,5)
+                                //}
+                                
+                                Spacer()
+                            HStack(alignment: .center) {
+                                TextField("1",text: $size[i])
+                                            .frame(width: 30)
+                                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .onChange(of: size[i], perform: {
+                                        if size[i] == "" {
+                                            self.total[0].value+=0.0
+                                        }
+                                        else {
+                                            var cur = FoodList[i].nutrition[0].value * Double(size[i])!
+                                            self.total[0].value += cur
+
+                                        }
+                                    })
+                                            
+                                       // .textFieldStyle(.RoundedBorder)
+                                        Text("인분")
+                                Spacer()
+                                Spacer()
+                                Text("\(getEat(idx: 0, value: FoodList[i].nutrition[0].value, size: size[i])) kcal")
+                                       // .textFieldStyle(.RoundedBorder)
+
+                                    //}
+                                    
+                               }
+                            .padding(.bottom,5)
+
                             }
-                            
                             .padding()
-                            .frame(height: 30)
-                            .background(
-                                LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.9803921569, green: 0.6470588235, blue: 0.3764705882, alpha: 1)), Color(#colorLiteral(red: 0.9882352941, green: 0.6705882353, blue: 0.6039215686, alpha: 1))]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                            )
+                            .frame(height: 80)
+                            .backgroundColor(.white)
                             .foregroundColor(.black)
                             .cornerRadius(15.0)
-                            .onAppear{
-                                if size[i] == ""{
-                                    self.total[idx].value+=0.0
+                            Spacer()
+                            //영양분 뷰
+                            ScrollView(.horizontal, showsIndicators: false){
+                                HStack{
+                                    ForEach(1..<self.FoodList[i].nutrition.count){ idx in
+                                HStack{
+                                    Text("\(getKorean(str: self.FoodList[i].nutrition[idx].key)) : ")
+                                    if size[i] == ""{
+                                        Text("0.00 g")
+                                    }
+                                    else{
+                                        Text("\(getEat(idx: idx, value: FoodList[i].nutrition[idx].value, size: size[i])) g")
+                                    }
                                 }
-                                else{
-                                    self.total[idx].value+=FoodList[i].nutrition[idx].value * Double(size[i])!
+                                .onChange(of: size[i], perform: {
+                                    if size[i] == "" {
+                                        self.total[idx].value+=0.0
+                                    }
+                                    else {
+                                        var cur = FoodList[i].nutrition[idx].value * Double(size[i])!
+                                        self.total[idx].value += cur
 
-                                }
-                            }
-                        }
-                        }
-                            
-                        }
-                        Spacer()
-                }
-                    .padding(.all)
-                     .frame(height: 150)
-                     .background(
-                         LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)), Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1))]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                     )
-                     .foregroundColor(.black)
-                     .cornerRadius(15.0)
-                
-                // .onAppear(perform: loadData)
-                }
-             }
-                
+                                    }
+                                })
+                                
+                                .padding()
+                                .frame(height: 30)
+                                .backgroundColor(.blue)
+                                .foregroundColor(.black)
+                                .cornerRadius(15.0)
             
-            } //Vstack end
-        .padding(.top, 5)
-       
-    }
+                            }
+                            }
+                                
+                            }
+                            Spacer()
+                    }
+                        .padding(.all)
+                         .frame(height: 150)
+                        .backgroundColor(.gray)
+
+                         .foregroundColor(.black)
+                         .cornerRadius(15.0)
+                    
+                   
+                    }
+                 }
+                    
+                
+                } //Vstack end
+            .padding(.top, 5)
+           
+        }
+            
+        
     }
                             
 }

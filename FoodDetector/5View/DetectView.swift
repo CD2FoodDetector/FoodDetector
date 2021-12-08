@@ -28,11 +28,11 @@ struct FoodNutritionInfo:Codable{
 
 struct foodNutritionResult: Codable{
     
-    var status_code: Int?
-    var id: String
-    var name: String
+    var status_code: Int
+    var id: String?
+    var name: String?
     
-    var nutrition : [FoodNutritionInfo]
+    var nutrition : [FoodNutritionInfo]?
 }
 /*
 struct Nutrition: Codable{
@@ -82,7 +82,13 @@ struct DetectView: View {
             do{
                 let res = try JSONDecoder().decode(foodNutritionResult.self, from: data)
                 //should be called once
-                foodNutritionList.append(res)
+                if res.status_code == 1{
+                    foodNutritionList.append(res)
+                }
+                else{
+                    print("status code err")
+                    print(res)
+                }
             } catch{
                 
                 print("에러")
@@ -122,7 +128,9 @@ struct DetectView: View {
                 
                 for food in res.result {
                     //let foodInfo = values(food)
-                    get_nutrition(id: food.food_id, serve_size: 1.0, size_unit: "인분")
+                    if res.status_code == 1 {
+                        get_nutrition(id: food.food_id, serve_size: 1.0, size_unit: "인분")
+                    }
                     
                 }
             } catch{
@@ -150,20 +158,24 @@ struct DetectView: View {
                     .resizable()
                     .ignoresSafeArea(.all, edges: .top)
                     .cornerRadius(10.0)
-                    .frame(height: 250)
-                    .aspectRatio(contentMode: .fill)
+                   // .frame(height: 250)
+                    .aspectRatio(contentMode: .fit)
                    // .padding(.bottom, 15)
                     .onAppear(perform: {
                         //connect server..
-                     //   get_detect("user0001_0000007.jpg")
+                        get_detect("user0001_0000007.jpg")
                     })
 
                 //Spacer()
                 //Text("총 칼로리 : \(MealNutrition.calorie) kcal").bold()
                 FoodInfoView()
+                    .onDisappear(perform: {
+                        image = UIImage()
+                    })
               
             }
             }
+            
             VStack{
                 Spacer()
                 HStack(){
@@ -181,12 +193,14 @@ struct DetectView: View {
                     })
                     .padding(.vertical, 10)
                     .padding(.horizontal, 5)
+
                 }
                 
             }
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(false)
+        
     }
     
 }

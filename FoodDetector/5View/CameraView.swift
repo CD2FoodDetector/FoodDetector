@@ -32,7 +32,7 @@ struct CameraView: View {
                         
                         HStack {
                             Spacer()
-                            if (camera.isTaken) && (pickerResult==UIImage()){
+                            if (camera.isTaken){
                                 Button(action: camera.reTake, label: {
                                     Image(systemName:"arrow.triangle.2.circlepath.camera")
                                         .foregroundColor(.black)
@@ -43,28 +43,10 @@ struct CameraView: View {
                                 })
                                 .padding(.leading,10)
                             }
-                            else{
-                                //NavigationView{
-                                    NavigationLink(destination: DetectView(image: $pickerResult)){
-                                        
-                                            Text("음식 detect")
-                                                .foregroundColor(.black)
-                                                .fontWeight(.semibold)
-                                                .padding(.vertical,10)
-                                                .padding(.horizontal,20)
-                                                .background(Color.white)
-                                                .clipShape(Capsule())
-                                        
-                                    }
-                                    .padding(.leading,10)
-                                    .navigationBarTitle("", displayMode: .inline)
-                                
-                            }
-                        }
-                        
+
                         Spacer()
                         
-                    //}
+                    }
                     
                     
                     Spacer()
@@ -130,13 +112,36 @@ struct CameraView: View {
                     .frame(height:75)
                 }
             }
-            .onAppear(perform: {
-                camera.Check()
-            })
-            .sheet(isPresented: $showImagePicker, content: {
-                  let configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
-                  PhotoPicker(configuration: configuration, pickerResult: $pickerResult, isPresented: $showImagePicker)
+                .onAppear(perform: {
+                    camera.Check()
                 })
+                .sheet(isPresented: $showImagePicker, content: {
+                      let configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+                      PhotoPicker(configuration: configuration, pickerResult: $pickerResult, isPresented: $showImagePicker)
+                    })
+                
+                
+                if pickerResult != UIImage(){
+                    NavigationLink(destination: DetectView(image: $pickerResult)){
+                        
+                            Text("음식 detect")
+                                .foregroundColor(.black)
+                                .fontWeight(.semibold)
+                                .padding(.vertical,10)
+                                .padding(.horizontal,20)
+                                .background(Color.white)
+                                .clipShape(Capsule())
+                        
+                    }
+                    .padding(.leading,10)
+                    .navigationBarTitle("", displayMode: .inline)
+                
+                }
+                else{
+                    
+                }
+
+           
         }
 }
 
