@@ -25,7 +25,6 @@ struct FoodNutritionInfo:Codable{
     var value : Double
 }
 
-
 struct foodNutritionResult: Codable{
     
     var status_code: Int
@@ -47,6 +46,9 @@ struct foodNutritionResult: Codable{
     }
 }
 
+struct AddMeal: Codable{
+    var status_code : Int
+}
 
 struct DetectView: View {
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
@@ -97,6 +99,48 @@ struct DetectView: View {
     }
     
     
+    func add_meal(id: String) {
+        
+        guard let url = URL(string: "http://3.36.103.81:80/account/meal_add") else {
+            print("Invalid url")
+            return
+        }
+        var request = URLRequest(url: url)
+        let params = try! JSONSerialization.data(withJSONObject: ["id":id, "image_name":"user0001_0000007.jpg", "calories_total": total[0].value,"carbo_total": total[1].value,"protein_total": total[2].value,"fat_total": total[3].value,"sugar_total": total[4].value,"salt_total": total[5].value,"saturated_fat_total": total[6].value])
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = params
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data=data else{
+                print("err at data")
+                return
+            }
+            do{
+                let res = try JSONDecoder().decode(foodNutritionResult.self, from: data)
+                //should be called once
+                if res.status_code == 1{
+                    print("meal add success!")
+                }
+                else{
+                    print("status code err")
+                    print(res)
+                }
+            } catch{
+                
+                print("meal add 에러")
+                print(error)
+        
+                return
+            }
+      //      print(foodNutritionList)
+        }.resume()
+        
+            
+        return
+    }
+    
+    
     
     func get_nutrition(id: String, serve_size: Float, size_unit:String) {
         
@@ -139,6 +183,7 @@ struct DetectView: View {
       //      print(foodNutritionList)
         }.resume()
         
+        return
             
 
     }
@@ -336,7 +381,7 @@ struct DetectView: View {
                                     .background(Color.lightgray)
                                      .foregroundColor(.black)
                                      .cornerRadius(15.0)
-                                
+                                    .padding(.vertical)
                                
                                 }
                              }
@@ -368,7 +413,10 @@ struct DetectView: View {
                 Spacer()
                 HStack(){
                     Spacer()
-                    Button(action: {}, label: {
+                    Button(action: {
+                        add_meal(id:"user0001")
+                        HomeView(calendar: Calendar(identifier: .gregorian))
+                    }, label: {
                         Text("식단 저장")
                             .foregroundColor(.white)
                             .fontWeight(.semibold)
