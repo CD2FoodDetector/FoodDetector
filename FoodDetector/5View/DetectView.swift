@@ -27,7 +27,7 @@ struct FoodNutritionInfo:Codable{
 
 struct foodNutritionResult: Codable{
     
-    var status_code: Int
+    var status_code: Int?
     var id: String
     var name: String
     
@@ -415,7 +415,7 @@ struct DetectView: View {
                     Spacer()
                     Button(action: {
                         add_meal(id:"user0001")
-                        HomeView(calendar: Calendar(identifier: .gregorian))
+                        self.mode.wrappedValue.dismiss()
                     }, label: {
                         Text("식단 저장")
                             .foregroundColor(.white)
