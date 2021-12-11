@@ -16,6 +16,7 @@ struct Response: Codable{
 
 class CommonVar: ObservableObject {
     @Published var token: String = ""
+    @Published var gcode: String = "1231"
 }
 
 struct ContentView: View {

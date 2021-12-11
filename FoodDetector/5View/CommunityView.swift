@@ -131,7 +131,9 @@ struct CommunityView: View {
             }
             
             .onAppear(perform: {
-                get_imgs_list("1231")
+                get_imgs_list(cv.gcode)
+                gcode_to_filter(cv.gcode)
+                print("cv.gcode  = \(cv.gcode)")
             })
             .onReceive(filter.$amountOfProtein, perform: { _ in
                 var gcode: String = ""
@@ -203,6 +205,41 @@ struct CommunityView: View {
                 posts.append(Post(id: i, userName: userList[i], text: dateList[i], profileImageName: userList[i], imageName: imgList[i]))
             }
         }.resume()
+    }
+    
+    func gcode_to_filter(_ gcode: String) {
+        switch gcode[gcode.index(gcode.startIndex, offsetBy: 0)] {
+        case "3":
+            filter.amountOfCarbo = Filter.AmountOfCarbo.많이
+        case "2":
+            filter.amountOfCarbo = Filter.AmountOfCarbo.보통
+        case "1":
+            filter.amountOfCarbo = Filter.AmountOfCarbo.적게
+        default:
+            filter.amountOfCarbo = Filter.AmountOfCarbo.많이
+        }
+        
+        switch gcode[gcode.index(gcode.startIndex, offsetBy: 1)] {
+        case "3":
+            filter.amountOfProtein = Filter.AmountOfProtein.많이
+        case "2":
+            filter.amountOfProtein = Filter.AmountOfProtein.보통
+        case "1":
+            filter.amountOfProtein = Filter.AmountOfProtein.적게
+        default:
+            filter.amountOfProtein = Filter.AmountOfProtein.많이
+        }
+        
+        switch gcode[gcode.index(gcode.startIndex, offsetBy: 2)] {
+        case "3":
+            filter.amountOfFat = Filter.AmountOfFat.많이
+        case "2":
+            filter.amountOfFat = Filter.AmountOfFat.보통
+        case "1":
+            filter.amountOfFat = Filter.AmountOfFat.적게
+        default:
+            filter.amountOfFat = Filter.AmountOfFat.많이
+        }
     }
 }
 
