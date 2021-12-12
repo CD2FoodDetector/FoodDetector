@@ -135,9 +135,9 @@ struct ProfileView: View {
                     // TODO: 지금까지 올린 식단 Grid 표시
                     ScrollView {
                         LazyVGrid(columns: gridlayout, spacing: 3, content: {
-                            ForEach(imgList, id: \.self) { imgName in
+                            ForEach(0..<imgList.count, id: \.self) { imgNameIndex in
                                 
-                                Image(uiImage: load_img(imgName))
+                                Image(uiImage: load_img(imgList[imgNameIndex]))
                                     .resizable()
                                     .frame(width: 128, height: 128) // iPhone12 기준 - 다른 기종 테스트 안했습니다.
                                     .clipped()

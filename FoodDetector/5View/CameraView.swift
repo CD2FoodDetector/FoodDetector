@@ -22,8 +22,8 @@ struct CameraView: View {
 
             ZStack{
                 //goint to be camera preview..
-                CameraPreview(camera: camera)
-                //Color.black
+                //CameraPreview(camera: camera)
+                Color.black
                     .ignoresSafeArea(.all, edges: .all)
                 
                 VStack{
