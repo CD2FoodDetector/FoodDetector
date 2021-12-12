@@ -25,9 +25,9 @@ struct FoodNutritionInfo:Codable{
     var value : Double
 }
 
-struct foodNutritionResult: Codable{
+struct foodNutritionResult: Codable {
     
-    var status_code: Int
+    var status_code: Int?
     var id: String
     var name: String
     
@@ -50,6 +50,11 @@ struct AddMeal: Codable{
     var status_code : Int
 }
 
+struct SearchFood: Codable{
+    var result : [foodNutritionResult]
+    var resultNum : Int
+}
+
 struct DetectView: View {
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     
@@ -65,6 +70,10 @@ struct DetectView: View {
     @State var size = [String](repeating: "1", count: 10)
     @State var newSize = [String](repeating: "1", count: 10)
     @State var detect_cnt = 0
+    @State var food_search_sheet = false
+    @State var search_foods = [foodNutritionResult]()
+    @State var search_foods_num = 0
+    @State var food_name = ""
     
     
     func getKorean(str: String)->String{
@@ -140,7 +149,43 @@ struct DetectView: View {
         return
     }
     
-    
+    func search_food(name: String) {
+        
+        guard let url = URL(string: "http://3.36.103.81:80/account/search_food") else {
+            print("Invalid url")
+            return
+        }
+        var request = URLRequest(url: url)
+        let params = try! JSONSerialization.data(withJSONObject: ["name":name])
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = params
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data=data else{
+                print("err at data")
+                return
+            }
+            do{
+                let res = try JSONDecoder().decode(SearchFood.self, from: data)
+                //should be called once
+                print("search_food decode!")
+                search_foods = res.result
+                search_foods_num = res.resultNum
+                
+            } catch{
+                
+                print("search_food 에러")
+                print(error)
+        
+                return
+            }
+      //      print(foodNutritionList)
+        }.resume()
+        
+            
+        return
+    }
     
     func get_nutrition(id: String, serve_size: Float, size_unit:String) {
         
@@ -375,13 +420,14 @@ struct DetectView: View {
                                         }
                                         Spacer()
                                 }
-                                    .padding(.all)
+                                .padding(.all)
                                      .frame(height: 150)
                                     //.backgroundColor(.gray)
                                     .background(Color.lightgray)
                                      .foregroundColor(.black)
                                      .cornerRadius(15.0)
-                                    .padding(.vertical)
+                                    .padding(.horizontal, 2)
+                                    .padding(.top,2)
                                
                                 }
                              }
@@ -412,10 +458,28 @@ struct DetectView: View {
 
                 Spacer()
                 HStack(){
+                    Button(action: {
+                        self.food_search_sheet.toggle()
+                    }, label: {
+                        Image(systemName: "plus.magnifyingglass")
+                     //       .resizable()
+                     //       .frame(width: 10, height: 10)
+                            .foregroundColor(.white)
+                            .padding(.vertical,10)
+                            .padding(.horizontal,10)
+                            .background(Color.black)
+                            .clipShape(Circle())
+                        //.border(Color.black)
+                        
+                    })
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 5)
+                    
+                    
                     Spacer()
                     Button(action: {
                         add_meal(id:"user0001")
-                        HomeView(calendar: Calendar(identifier: .gregorian))
+                        self.mode.wrappedValue.dismiss()
                     }, label: {
                         Text("식단 저장")
                             .foregroundColor(.white)
@@ -433,6 +497,52 @@ struct DetectView: View {
                 }
                 
             }
+            .sheet(isPresented: $food_search_sheet){
+                VStack(alignment:.leading){
+                    HStack{
+                        Image(systemName:"magnifyingglass")
+                            .font(.system(size:23, weight: .bold))
+                            .foregroundColor(.gray)
+                    TextField("추가할 음식을 입력해주세요..",text: $food_name,onCommit:{
+                        search_food(name:food_name)
+                    })
+                    }
+                    .padding(.vertical, 10)
+                    .padding(.horizontal,2)
+                    .background(Color.primary.opacity(0.05))
+                    .cornerRadius(8)
+                    .padding(.horizontal,2)
+                    Text("탭해서 음식을 추가하세요.")
+                        .padding(.horizontal,2)
+                    Divider()
+                    if search_foods_num == 0{
+                        Spacer()
+                        Text("음식을 찾을 수 없습니다. 다시 입력해 주세요.")
+                        Spacer()
+                    }
+                    else{
+                        
+                        List{
+                            ForEach(0..<search_foods.count, id:\.self){ index in
+                                Text("\(search_foods[index].name)")
+                                    .fontWeight(.semibold)
+                                    .padding(.vertical,10)
+                                    .padding(.horizontal,20)
+                                    .onTapGesture{
+                                        // food add
+                                        foodNutritionList.append(search_foods[index])
+                                        
+                                        self.food_search_sheet.toggle()
+                                    }
+                                    .listRowInsets(EdgeInsets())
+                            }
+                            .listStyle(PlainListStyle())
+
+                        }
+                    }
+                }
+                .padding()
+            }
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
@@ -440,8 +550,6 @@ struct DetectView: View {
     }
     
 }
-
-
 
 struct DetectView_Previews: PreviewProvider {
     static var previews: some View {
