@@ -60,7 +60,7 @@ struct CameraView: View {
                             
                             }
                             else{
-                                Text("not yet")
+                                Text(" ")
                             }
 
                         

@@ -420,13 +420,14 @@ struct DetectView: View {
                                         }
                                         Spacer()
                                 }
-                                    //.padding(.all)
+                                .padding(.all)
                                      .frame(height: 150)
                                     //.backgroundColor(.gray)
                                     .background(Color.lightgray)
                                      .foregroundColor(.black)
                                      .cornerRadius(15.0)
-                                    .padding(.all)
+                                    .padding(.horizontal, 2)
+                                    .padding(.top,2)
                                
                                 }
                              }
@@ -497,20 +498,30 @@ struct DetectView: View {
                 
             }
             .sheet(isPresented: $food_search_sheet){
-                VStack{
-                    
+                VStack(alignment:.leading){
+                    HStack{
+                        Image(systemName:"magnifyingglass")
+                            .font(.system(size:23, weight: .bold))
+                            .foregroundColor(.gray)
                     TextField("추가할 음식을 입력해주세요..",text: $food_name,onCommit:{
                         search_food(name:food_name)
                     })
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
+                    .padding(.vertical, 10)
+                    .padding(.horizontal,2)
+                    .background(Color.primary.opacity(0.05))
+                    .cornerRadius(8)
+                    .padding(.horizontal,2)
+                    Text("탭해서 음식을 추가하세요.")
+                        .padding(.horizontal,2)
+                    Divider()
                     if search_foods_num == 0{
                         Spacer()
                         Text("음식을 찾을 수 없습니다. 다시 입력해 주세요.")
                         Spacer()
                     }
                     else{
-                        Text("탭해서 음식을 추가하세요.")
-                        Divider()
+                        
                         List{
                             ForEach(0..<search_foods.count, id:\.self){ index in
                                 Text("\(search_foods[index].name)")
@@ -523,7 +534,9 @@ struct DetectView: View {
                                         
                                         self.food_search_sheet.toggle()
                                     }
+                                    .listRowInsets(EdgeInsets())
                             }
+                            .listStyle(PlainListStyle())
 
                         }
                     }
