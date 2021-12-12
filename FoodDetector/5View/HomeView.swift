@@ -13,7 +13,7 @@ extension Color {
 }
 
 struct UserDateInfo: Codable{
-    var infoList: [[String: Int]]
+    var infoList: [[String: Float]]
     var infoNum: Int
     var user_calorie: Int
     var user_carbo: Int
