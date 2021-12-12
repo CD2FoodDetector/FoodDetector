@@ -73,7 +73,7 @@ struct DetectView: View {
     @State var food_search_sheet = false
     @State var search_foods = [foodNutritionResult]()
     @State var search_foods_num = 0
-    @State var food_name = "_"
+    @State var food_name = ""
     
     
     func getKorean(str: String)->String{
@@ -420,13 +420,13 @@ struct DetectView: View {
                                         }
                                         Spacer()
                                 }
-                                    .padding(.all)
+                                    //.padding(.all)
                                      .frame(height: 150)
                                     //.backgroundColor(.gray)
                                     .background(Color.lightgray)
                                      .foregroundColor(.black)
                                      .cornerRadius(15.0)
-                                    .padding(.vertical)
+                                    .padding(.all)
                                
                                 }
                              }
@@ -460,9 +460,10 @@ struct DetectView: View {
                     Button(action: {
                         self.food_search_sheet.toggle()
                     }, label: {
-                        Text("+")
+                        Image(systemName: "plus.magnifyingglass")
+                     //       .resizable()
+                     //       .frame(width: 10, height: 10)
                             .foregroundColor(.white)
-                            .fontWeight(.semibold)
                             .padding(.vertical,10)
                             .padding(.horizontal,10)
                             .background(Color.black)
@@ -504,16 +505,22 @@ struct DetectView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     if search_foods_num == 0{
                         Spacer()
-                        Text("입력한 \(food_name)을 찾을 수 없습니다. 다시 입력해 주세요.")
+                        Text("음식을 찾을 수 없습니다. 다시 입력해 주세요.")
                         Spacer()
                     }
                     else{
+                        Text("탭해서 음식을 추가하세요.")
+                        Divider()
                         List{
                             ForEach(0..<search_foods.count, id:\.self){ index in
                                 Text("\(search_foods[index].name)")
+                                    .fontWeight(.semibold)
+                                    .padding(.vertical,10)
+                                    .padding(.horizontal,20)
                                     .onTapGesture{
                                         // food add
                                         foodNutritionList.append(search_foods[index])
+                                        
                                         self.food_search_sheet.toggle()
                                     }
                             }
